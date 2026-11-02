@@ -1,0 +1,27 @@
+name: Выпуск русского перевода
+on:
+  push:
+    tags: [v2.1.2-ru.1]
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Собрать комплект перевода
+        run: |
+          python - <<'PY'
+          from zipfile import ZipFile, ZIP_DEFLATED
+          names = ["LICENSE", "README.md", "build.py", "translation.json", "docs/modes.jpg", "docs/trade.jpg"]
+          with ZipFile("NeutronDancer-RU-2.1.2-ru.1.zip", "w", ZIP_DEFLATED) as archive:
+              for name in names:
+                  archive.write(name, "NeutronDancer-RU/" + name)
+          PY
+      - name: Опубликовать проверенный тег
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" NeutronDancer-RU-2.1.2-ru.1.zip --verify-tag --title "Neutron Dancer 2.1.2 · Русский перевод 1" --notes "Комплект русской локализации для оригинального Neutron Dancer 2.1.2. Скачайте NeutronDancer-RU-2.1.2-ru.1.zip из Assets. Инструкция и ссылка на оригинал находятся в README. Проверено в Windows с ED Market Connector 6.1.2."

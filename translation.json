@@ -1,0 +1,679 @@
+[
+ {
+  "file": "assets/help.md",
+  "before": "bf41faf1035f54d4f21030dbfcbd21c1099b377f33366b911d29ffd9e6a1101c",
+  "after": "e7b64788dd8ca3cfacd41f70b2d3dab471088ad17d43e4bed1cc24a9dd131f29",
+  "edits": [
+   [
+    0,
+    1,
+    "# Neutron Dancer [v{version}](https://github.com/dwomble/EDMC-NeutronDancer/) · Руководство пилота\n"
+   ],
+   [
+    2,
+    1,
+    "Выберите тип маршрута в списке вверху панели. Для перелёта между системами подойдут галактический и нейтронный маршруты. Для торговли выберите торговый маршрут и укажите начальную станцию.\n"
+   ],
+   [
+    4,
+    8,
+    "## Галактический маршрут\n"
+   ],
+   [
+    13,
+    1,
+    "Плагин передаёт Spansh данные о модулях и массе корабля. Чтобы плагин узнал комплектацию, хотя бы один раз пересядьте на этот корабль при работающем EDMC. После смены корабля или модулей пересчитайте маршрут.\n"
+   ],
+   [
+    15,
+    1,
+    "![Галактический маршрут](https://github.com/user-attachments/assets/7eb44a7e-5233-41b8-ada5-3dd39f9fd35a)\n"
+   ],
+   [
+    17,
+    1,
+    "### Алгоритм расчёта\n"
+   ],
+   [
+    19,
+    1,
+    "- **Экономия топлива (Fuel)**. Короткие прыжки расходуют меньше топлива. Алгоритм не предусматривает заправку у звёзд и усиление РСД.\n- **Экономия топлива и прыжков (Fuel Jumps)**. После расчёта экономичного маршрута планировщик сокращает число прыжков с учётом запаса в баке. Резерв рассчитан на одно пополнение расходного бака. В длинном перелёте топливо может закончиться раньше.\n- **Оптимистичный (Optimistic)**. Предпочитает нейтронные звёзды и обходит области, где между ними большие разрывы. Обычно даёт самый быстрый перелёт с наименьшим числом прыжков.\n- **Пессимистичный (Pessimistic)**. Завышает среднее расстояние между звёздами, чтобы быстрее отсеять варианты. Расчёт быстрее, но перелёт может оказаться длиннее.\n"
+   ],
+   [
+    21,
+    1,
+    "### Усиление РСД и топливо\n"
+   ],
+   [
+    23,
+    1,
+    "- Отметьте, если РСД **уже усилен** перед первым прыжком.\n- Разрешите **усиление у нейтронных звёзд**, чтобы планировщик учитывал прыжки с увеличенной дальностью.\n- Разрешите **инъекции РСД**, если готовы расходовать материалы синтеза там, где нет нейтронной звезды.\n- Исключите **вторичные звёзды**, чтобы использовать для заправки и усиления только главную звезду системы.\n- Если включена **заправка при каждой возможности**, заправляйтесь у каждой подходящей звезды. Иначе заправляйтесь только в отмеченных точках. Дополнительная масса топлива может сделать следующий прыжок невозможным. Если разрешены вторичные звёзды, можно случайно набрать топливо во время усиления.\n"
+   ],
+   [
+    25,
+    1,
+    "Для первого перелёта подойдёт оптимистичный алгоритм с усилением РСД, исключением вторичных звёзд и резервом в несколько тонн топлива.\n"
+   ],
+   [
+    27,
+    1,
+    "На карте галактики выбирайте следующую систему **целью**. Внутриигровой планировщик иногда отказывается прокладывать предельный прыжок с частично пустым баком. Если топлива набрано больше расчётного, можно израсходовать излишек в форсированном суперкруизе (SCO), если ваш РСД его поддерживает. Если вы сбились с маршрута, найдите в таблице следующую запланированную заправку, проложите к ней путь в игре и продолжайте маршрут после заправки. Из-за особенностей расчёта маршрут в плагине может немного отличаться от маршрута на сайте Spansh.\n"
+   ],
+   [
+    29,
+    1,
+    "## Нейтронный маршрут\n"
+   ],
+   [
+    31,
+    1,
+    "Введите начальную и конечную системы, дальность прыжка, прямолинейность маршрута и множитель усиления. В контекстном меню по правой кнопке мыши доступны недавно выбранные системы и корабли. Нажмите кнопку расчёта, чтобы отправить запрос в Spansh.\n"
+   ],
+   [
+    33,
+    1,
+    "![Нейтронный маршрут](https://github.com/user-attachments/assets/fdc5f3f6-a904-476a-a6c6-1b7b8364ccd2)\n"
+   ],
+   [
+    35,
+    1,
+    "- Чем выше **прямолинейность**, тем меньше допустимое отклонение к нейтронной звезде. При 100 % планировщик держится прямой и обычно разбивает путь на участки примерно по 20 000 св. лет.\n- **Множитель усиления** задаёт дальность усиленного прыжка относительно обычного. Для РСД Mk II используется 6, для остальных — 4. Для текущего корабля значение подставляется автоматически.\n- Нажмите **+** у начальной системы, чтобы задать промежуточную точку. Кнопка **−** удаляет точку, **+** вставляет ещё одну ниже.\n"
+   ],
+   [
+    37,
+    1,
+    "## Путь к богатству и экзобиология\n"
+   ],
+   [
+    39,
+    1,
+    "Укажите начальную систему. Чтобы вернуться в неё в конце маршрута, оставьте конечную систему пустой. Задайте дальность прыжка, радиус поиска в стороне от прямого пути и максимальное число систем. Запустите расчёт.\n"
+   ],
+   [
+    41,
+    1,
+    "![Экзобиологический маршрут](https://github.com/user-attachments/assets/a577dce7-f8dd-4557-b479-ed68c02ccf00)\n"
+   ],
+   [
+    43,
+    2,
+    "Оба планировщика позволяют обходить системы, затронутые войной с таргоидами, и отдавать предпочтение кольцевому маршруту. Они ищут цели вне населённых систем. Если возле Пузыря ничего не найдено, увеличьте радиус поиска.\n"
+   ],
+   [
+    46,
+    1,
+    "- **Путь к богатству** ищет ценные небесные тела. Если планируете составлять карты поверхности зондами DSS, включите оценку по стоимости картографирования. Для сканирования FSS из точки входа в систему оставьте эту опцию выключенной. Такой облёт быстрее, но доход ниже.\n- **Экзобиология** ищет системы с ценными биологическими сигналами. Минимальную стоимость вида задают в миллионах кредитов. Чем выше порог, тем меньше малоценных находок войдёт в маршрут.\n"
+   ],
+   [
+    48,
+    1,
+    "## Торговый маршрут\n"
+   ],
+   [
+    50,
+    1,
+    "Планировщик ищет торговое кольцо с возвращением на начальную станцию. Начните вводить **название станции** и выберите её из подсказок. Введите доступный капитал в кредитах и свободную вместимость трюма в тоннах.\n"
+   ],
+   [
+    52,
+    1,
+    "![Торговый маршрут](https://github.com/user-attachments/assets/d99e0ae4-bbc9-444b-859a-6997fdf8a604)\n"
+   ],
+   [
+    54,
+    1,
+    "- **Число этапов** ограничивает количество торговых перегонов.\n- **Дальность этапа** ограничивает расстояние между системами в световых годах.\n- **Расстояние до станции** отсчитывают от точки входа в её систему, в световых секундах.\n- **Возраст цен** задают в днях. Оставьте поле пустым, если подходят данные любой давности.\n- Требование **большой площадки** исключает станции, куда не сядет большой корабль. Отдельно можно разрешить планетарные порты и станции с ограниченным доступом, например базы инженеров.\n- Разрешайте **запрещённые товары**, если готовы возить груз, запрещённый в пункте назначения.\n- Разрешите **авианосцы игроков**, чтобы включить их в поиск.\n- Включите **уникальные станции**, чтобы исключить повторные торговые остановки.\n- Разрешайте **системы с пропуском**, если у вас есть доступ.\n"
+   ],
+   [
+    56,
+    1,
+    "Запустите расчёт и откройте таблицу построенного маршрута. При наведении на кнопку следующей точки появятся станция, товар и ожидаемая прибыль.\n"
+   ],
+   [
+    58,
+    1,
+    "## Туристический маршрут\n"
+   ],
+   [
+    60,
+    1,
+    "Укажите начальную систему и добавьте остановки кнопкой **+**. Кнопки **−** и **+** у каждой остановки удаляют её или вставляют ещё одну ниже. Оставьте конечную систему пустой для возврата к началу или задайте отдельный пункт назначения. Укажите дальность прыжка и запустите расчёт.\n"
+   ],
+   [
+    62,
+    1,
+    "![Туристический маршрут](https://github.com/user-attachments/assets/1d1953fa-2030-4dad-8439-8c752f1979c3)\n"
+   ],
+   [
+    64,
+    1,
+    "## Маршрут авианосца\n"
+   ],
+   [
+    66,
+    1,
+    "Введите начальную систему, добавьте остановки кнопкой **+**, выберите тип авианосца и укажите, сколько места уже занято грузом и модулями. Начальный запас топлива рассчитывается автоматически. Плагин отслеживает продвижение и может уведомить, когда после прыжка авианосец будет готов к следующему.\n"
+   ],
+   [
+    68,
+    1,
+    "![Маршрут авианосца](https://github.com/user-attachments/assets/9f9c507b-9ec3-42f0-8674-76030343220a)\n"
+   ],
+   [
+    70,
+    1,
+    "## Обследование бокселя\n"
+   ],
+   [
+    72,
+    1,
+    "Введите обозначение бокселя вместе с кодом массы, затем начальный и конечный номера. Плагин сформирует последовательность имён систем. Он проверяет формат обозначения бокселя, но существование ещё не открытых систем проверить невозможно.\n"
+   ],
+   [
+    74,
+    1,
+    "## Импорт и экспорт\n"
+   ],
+   [
+    76,
+    1,
+    "Нажмите кнопку импорта и выберите CSV с разделителями-запятыми, например файл, сохранённый планировщиком Spansh. По умолчанию открывается папка `routes` плагина. Другую папку можно выбрать в настройках.\n"
+   ],
+   [
+    78,
+    1,
+    "Для импорта нужен столбец `System Name` или `system`. Допускаются дополнительные столбцы. Если указано оставшееся расстояние или число прыжков, плагин использует их при расчёте.\n"
+   ],
+   [
+    80,
+    1,
+    "Для экспорта нажмите кнопку экспорта и выберите имя файла CSV. По названию корабля, начальной и конечной систем в имени файла проще найти нужный маршрут позже.\n"
+   ],
+   [
+    82,
+    1,
+    "## Как лететь по маршруту\n"
+   ],
+   [
+    84,
+    2,
+    "Между кнопками **◄** и **►** показана следующая точка. Нажмите на её название, откройте карту галактики в Elite Dangerous и вставьте название в поиск. Для нейтронного маршрута проложите путь средствами игры. Для галактического маршрута выберите систему целью прыжка. Если она вне досягаемости, проложите путь к ней.\n"
+   ],
+   [
+    87,
+    1,
+    "Если вы скопировали другой текст, снова нажмите на название точки. Для Linux доступны [инструкции по буферу обмена](https://github.com/dwomble/EDMC-NeutronDancer/tree/develop#linux-clipboard).\n"
+   ],
+   [
+    89,
+    1,
+    "Наведите указатель на точку, чтобы увидеть сведения об остановке. Для торговых рейсов это станция, товар и прибыль, для исследовательских — небесное тело и стоимость данных. Подсказка у шкалы показывает оставшиеся прыжки и расстояние, если они известны.\n"
+   ],
+   [
+    91,
+    1,
+    "Кнопка просмотра открывает таблицу с точками маршрута, ходом перелёта и скоростью продвижения. При закрытии EDMC плагин запоминает текущую точку и продолжает с неё после запуска.\n"
+   ],
+   [
+    93,
+    1,
+    "## Игровой оверлей\n"
+   ],
+   [
+    95,
+    1,
+    "Установите и включите [EDMC Modern Overlay](https://github.com/SweetJonnySauce/EDMCModernOverlay), чтобы выводить подсказки поверх игры. В настройках Neutron Dancer можно включить каждую область отдельно и выбрать цвет текста.\n"
+   ],
+   [
+    97,
+    1,
+    "1. **Кабина** показывает следующий прыжок и сведения о маршруте.\n1. **Карта галактики** показывает только пункт назначения, пока открыта карта.\n1. **Авианосец** показывает пункт назначения, время до прыжка и до готовности к следующему.\n"
+   ],
+   [
+    99,
+    1,
+    "Положение, фон и рамку меняют в [панели управления Modern Overlay](https://github.com/SweetJonnySauce/EDMCModernOverlay/wiki/Overlay-Controller). Для кабины можно добавить шкалу прогресса и настроить строку состояния. Доступны следующие подстановки:\n"
+   ],
+   [
+    101,
+    1,
+    "- `{jc}` — выполнено прыжков.\n- `{jr}` — осталось прыжков.\n- `{jt}` — всего прыжков.\n- `{dc}` — расстояние до следующей точки.\n- `{dr}` — осталось пролететь.\n- `{dt}` — полная длина маршрута.\n- `{dh}` — пройденное расстояние за час.\n- `{jh}` — число прыжков за час.\n- `{rj}` — прыжков до следующей звезды для заправки.\n- `{rd}` — расстояние до следующей заправки.\n- `{rs}` — сообщение о числе прыжков до заправки. Пусто, если заправка не запланирована.\n- `{st}` — значок типа звезды, в том числе нейтронной или подходящей для заправки.\n"
+   ],
+   [
+    103,
+    1,
+    "Настраиваемая строка работает для галактических, нейтронных и импортированных маршрутов, в которых известны точки заправки. Для торговых, туристических, исследовательских маршрутов и рейсов авианосца в кабине выводятся те же сведения, что и в подсказке следующей точки.\n"
+   ],
+   [
+    105,
+    1,
+    "## Команды в игровом чате\n"
+   ],
+   [
+    107,
+    5,
+    "Введите команду в чат Elite Dangerous:\n"
+   ],
+   [
+    113,
+    1,
+    "- `!nd next` — перейти к следующей точке.\n- `!nd previous` или `!nd prev` — вернуться к предыдущей.\n- `!nd copy` — снова скопировать следующую точку в буфер обмена.\n"
+   ],
+   [
+    115,
+    1,
+    "С плагином [EDMC Hotkeys](https://github.com/SweetJonnySauce/EDMCHotkeys) этим командам можно назначить сочетания клавиш. У большинства элементов интерфейса есть всплывающие подсказки, а у многих — меню по правой кнопке мыши.\n"
+   ],
+   [
+    117,
+    1,
+    "## Авторы и обратная связь\n"
+   ],
+   [
+    119,
+    1,
+    "Благодарим [CMDR Spansh](https://www.patreon.com/spansh) за [планировщики маршрутов Spansh](https://spansh.co.uk/plotter). Плагин основан на [Spansh Router](https://github.com/CMDR-Kiel42/EDMC_SpanshRouter) от CMDR Kiel42 и [версии Norohind](https://github.com/norohind/EDMC_SpanshRouter).\n"
+   ],
+   [
+    121,
+    95,
+    "[Предложения автору Neutron Dancer](https://github.com/dwomble/EDMC-NeutronDancer/issues). Удачных полётов, командир! o7\n"
+   ]
+  ]
+ },
+ {
+  "file": "Router/constants.py",
+  "before": "41faffd1e25741752bcf0f34044241e3bd5509902fb966c3abba35a0d4e87a86",
+  "after": "b5eea407ea81c9bb7f14850a64ad7a3acde07b33395bb71ff25648a1a31ca023",
+  "edits": [
+   [
+    107,
+    1,
+    "OVERLAY_PROGRESS_DEFAULT = \"{st} до заправки: {rj} прыж.\\nПрыжки: {jc} / {jt}, путь: {dc} / {dt} св. г., осталось {dr} св. г.\\n{jh} прыж./ч, {dh} св. г./ч\"\n"
+   ],
+   [
+    128,
+    80,
+    "    'help': 'Справка',\n    'route': 'Маршрут',\n    'plot_title': 'Планировщик маршрутов',\n    'plotter': 'Neutron Dancer v{version}',\n    'no_route': 'Маршрут не задан',\n    'jumps_remaining': 'Осталось',\n    'body_count': 'Объекты для сканирования в',\n    'restock_tritium': 'Пополните запасы трития',\n    'source_system': 'Система отправления',\n    'dest_system': 'Система назначения',\n    'final_dest': 'Конечная система',\n    'supercharge_label': 'Усиление прыжка',\n    'standard_supercharge': 'Обычное (×4)',\n    'overcharge_supercharge': 'Усиленное (×6)',\n    'clear_route_yesno': 'Очистить текущий маршрут?',\n    'route_complete': 'Маршрут пройден!',\n    'update_available': 'Версия {v} будет установлена при выходе. Нажмите, чтобы отменить.',\n    'jump': 'прыжок',\n    'jumps': 'прыж.',\n    'range': 'Дальность',\n    'waypoints': 'точек',\n    'distance': 'расстояние',\n    'total_distance': 'Длина маршрута',\n    'neutron_router': 'Нейтронный маршрут',\n    'galaxy_router': 'Обычный маршрут',\n    'cargo': 'Груз, т',\n    'fuel_reserve': 'Резерв, т',\n    'radius': 'Радиус',\n    'max_results': 'Систем',\n    'min_landmark_value': 'Мин. цена',\n    'station': 'Станция отправления',\n    'starting_capital': 'Капитал, кр.',\n    'max_cargo': 'Трюм, т',\n    'max_hops': 'Макс. этапов',\n    'max_hop_distance': 'Этап, св. г.',\n    'max_distance': 'До ст., св. с.',\n    'max_price_age': 'Цены, дн.',\n    'destination': 'Система остановки',\n    'via_system': 'Через систему',\n    'add_hop': '+',\n    'remove_hop': '−',\n    'carrier_type': 'Тип носителя',\n    'fleet_carrier': 'Авианосец',\n    'squadron_carrier': 'Носитель эскадрильи',\n    'capacity_used': 'Занято, т',\n    'requires_large_pad': 'Большая площадка',\n    'allow_prohibited': 'Запрещённые товары',\n    'allow_planetary': 'Планетарные порты',\n    'allow_player_owned': 'Авианосцы игроков',\n    'allow_restricted_access': 'Ограниченный доступ',\n    'unique': 'Без повторов станций',\n    'permit': 'Системы с допуском',\n    'is_supercharged': 'FSD уже усилен',\n    'use_supercharge': 'Усиление от звёзд',\n    'use_injections': 'Инъекции FSD',\n    'exclude_secondary': 'Без вторичных звёзд',\n    'refuel_every_scoopable': 'Заправка при случае',\n    'use_mapping_value': 'По цене картографии',\n    'avoid_thargoids': 'Обходить таргоидов',\n    'loop': 'Кольцевой маршрут',\n    'cooldown_complete': 'Авианосец готов к прыжку',\n    'plotting': 'Идёт расчёт маршрута…',\n    'progress': 'Пройдено',\n    'speed': 'Скорость',\n    'jumps_per_hour': ' прыж./ч',\n    'dist_per_hour': ' св. г./ч',\n    'profit': 'Прибыль',\n    'scan_value': 'За сканирование',\n    'mapping_value': 'За картографию',\n    'landmark_value': 'За биоданные',\n    'refuel': 'Заправка',\n    'carrier_jumping': 'Прыжок авианосца назначен',\n    'carrier_cooldown': 'Остывание авианосца',\n    'next_refuel': 'До заправки: {r} прыж.',\n    'refuel_now': 'Заправьтесь сейчас!',\n    'overlays': 'Оверлеи',\n    'router': 'Планировщик',\n    'boxel_name': 'Боксель',\n    'start_num': 'С номера',\n    'end_num': 'По номер',\n"
+   ],
+   [
+    212,
+    52,
+    "    'route_type': 'Выберите тип маршрута',\n    'neutron_plotter': 'Маршрут по нейтронным звёздам через Spansh',\n    'galaxy_plotter': 'Точный расчёт маршрута корабля через Spansh',\n    'help': 'Открыть справку и руководство',\n    'source_system': 'Название системы отправления. Правая кнопка мыши открывает меню.',\n    'dest_system': 'Название системы назначения. Правая кнопка мыши открывает меню.',\n    'range': 'Дальность прыжка в световых годах. Правая кнопка мыши открывает меню.',\n    'efficiency': 'Эффективность прокладки маршрута, %',\n    'standard_multiplier': 'Стандартное усиление дальности в 4 раза. Правая кнопка мыши открывает меню.',\n    'overcharge_multiplier': 'Усиление дальности Caspian Explorer в 6 раз. Правая кнопка мыши открывает меню.',\n    'copy_to_clipboard': 'Нажмите, чтобы скопировать в буфер обмена',\n    'jump': 'Осталось: {j} прыж. {d}',\n    'waypoints': 'Осталось точек: {j}. {d}',\n    'speed': 'За час: {j} прыж., {d} св. г.',\n    'releasenotes': 'Изменения в версии:\\n{c}',\n    'select_ship': 'Выберите корабль для расчёта маршрута',\n    'galaxy_options': 'Выберите нужные параметры. Можно отметить несколько. Подробности — в справке.',\n    'cargo': 'Масса груза на борту в тоннах',\n    'calc_time': 'Время, отведённое на расчёт маршрута',\n    'select_algorithm': 'Алгоритм расчёта. Подробности см. на spansh.co.uk.',\n    'fuel_reserve': 'Запас топлива в тоннах, который нужно сохранить до заправки',\n    'radius': 'Радиус поиска в световых годах. Правая кнопка мыши открывает меню.',\n    'max_results': 'Максимальное число систем на маршруте',\n    'min_body_value': 'Минимальная стоимость данных об объекте',\n    'min_species_value': 'Минимальная стоимость образцов одного вида в миллионах кредитов',\n    'station': 'Станция отправления. Начните вводить название и выберите станцию из списка.',\n    'starting_capital': 'Сколько кредитов доступно для закупки товара',\n    'max_cargo': 'Вместимость грузового трюма в тоннах',\n    'max_hops': 'Максимальное число торговых перелётов',\n    'max_hop_distance': 'Максимальное расстояние между остановками в световых годах',\n    'max_distance': 'Максимальное расстояние от точки прибытия в систему в световых секундах',\n    'max_price_age': 'Максимальный возраст цен в днях. Оставьте пустым, чтобы снять ограничение.',\n    'final_destination': 'Конечная система. Правая кнопка мыши открывает меню.',\n    'destination': 'Система для остановки. Правая кнопка мыши открывает меню.',\n    'via_system': 'Промежуточная система, через которую должен пройти маршрут',\n    'add_hop': 'Добавить остановку после этой',\n    'remove_hop': 'Убрать эту остановку',\n    'carrier_type': 'Тип носителя определяет вместимость и дальность прыжка',\n    'capacity_used': 'Место под груз и установленные модули, в тоннах',\n    'requires_large_pad': 'Только станции с большой посадочной площадкой',\n    'allow_prohibited': 'Разрешить товары, запрещённые сверхдержавой в пункте назначения',\n    'allow_planetary': 'Включать планетарные станции',\n    'allow_player_owned': 'Включать авианосцы игроков в список остановок',\n    'allow_restricted_access': 'Включать станции с ограниченным доступом, например базы инженеров',\n    'unique': 'Посещать каждую станцию только один раз',\n    'permit': 'Включать системы, для которых требуется разрешение',\n    'loop': 'По возможности проложить кольцевой маршрут',\n    'progress': 'Выполнение маршрута',\n    'none': 'Нет',\n    'boxel_name': 'Название бокселя с буквой класса массы. Правая кнопка мыши открывает меню.',\n    'start_num': 'Первый порядковый номер системы для исследования',\n    'end_num': 'Последний порядковый номер системы для исследования',\n"
+   ],
+   [
+    268,
+    12,
+    "    'prev': '⋖',\n    'next': '⋗',\n    'next_wp': 'Следующая точка?',\n    'plot_route': 'Построить маршрут',\n    'import_route': 'Импорт',\n    'calculate_route': 'Рассчитать',\n    'cancel': 'Отмена',\n    'import_file': 'Импорт файла',\n    'export_route': 'Экспорт',\n    'clear_route': 'Очистить',\n    'show_route': 'Показать',\n"
+   ],
+   [
+    284,
+    17,
+    "    'plot_error': 'Не удалось построить маршрут. Попробуйте ещё раз.',\n    'required_version': 'Для работы нужен EDMC версии 4.0 или новее.',\n    'invalid_range': 'Некорректная дальность',\n    'no_response': 'Сервер не ответил',\n    'no_file': 'Файл не выбран',\n    'no_route': 'Нет текущего маршрута',\n    'empty_file': 'Файл пуст или в нём нет строки заголовков',\n    'invalid_file': 'Файл повреждён или его формат не поддерживается',\n    'no_filename': 'Имя файла не задано',\n    'parse_error': 'Не удалось прочитать файл маршрута',\n    'no_ships': 'Чтобы получить данные корабля, планировщику нужна запись о смене корабля в игре.',\n    'no_ship': 'Корабль не выбран',\n    'ship_not_found': 'Корабль не найден на верфи',\n    'no_system_id': 'Не удалось найти систему. Попробуйте ещё раз.',\n    'format_error': 'Ошибка в формате строки хода маршрута',\n    'invalid_boxel': 'Проверьте название бокселя и диапазон номеров',\n    'boxel_impossible': 'Недопустимый класс массы',\n"
+   ],
+   [
+    304,
+    12,
+    "    'version': 'Версия',\n    'overlays': 'Оверлеи',\n    'enable': 'Включить',\n    'foreground': 'Цвет текста',\n    'controller': 'Положение и фон оверлеев меняются в настройках Modern Overlay.',\n    'default_overlay': 'Основные параметры оверлея',\n    'progress_bar': 'Индикатор выполнения',\n    'progress_display': 'Сведения о маршруте',\n    'options': 'Настройки Neutron Dancer',\n    'select': 'Выбрать',\n    'show_carrier_cooldown': 'Уведомлять о готовности авианосца к прыжку',\n    'routes_directory': 'Папка для файлов маршрутов',\n"
+   ],
+   [
+    319,
+    6,
+    "    'idle': 'Следующий прыжок: {d}',\n    'jump': 'Авианосец прыгнет в {d} через {t}',\n    'cooldown': 'Остывание авианосца: {t}',\n    'neutron': 'Здесь можно усилить FSD',\n    'refuel': 'Здесь можно заправиться',\n}\n\n# Display names only. Spansh and saved routes use the English algorithm keys.\nALGORITHMS = {\n    'Fuel': 'По топливу', 'Fuel Jumps': 'Топливо и прыжки',\n    'Guided': 'Направленный', 'Optimistic': 'Оптимистичный', 'Pessimistic': 'Пессимистичный',\n}\nROUTE_LABELS = {\n    'Galaxy': lbls['galaxy_router'], 'Neutron': lbls['neutron_router'],\n    'RtoR': 'Дорога к богатству', 'Exobiology': 'Экзобиология',\n    'Trade': 'Торговый маршрут', 'Tourist': 'Туристический маршрут',\n    'FleetCarrier': 'Маршрут авианосца', 'Boxel': 'Исследование бокселя',\n}\n"
+   ]
+  ]
+ },
+ {
+  "file": "Router/csv.py",
+  "before": "349560fcb13dbcb7f9813d6c824a99b4dc9e4bbb5f7f121cfc776342a1dec2d8",
+  "after": "44fbe23c44dfc0bdf8e50d39d25d2853352d4785f5782312e9485a2b69211f1d",
+  "edits": [
+   [
+    16,
+    1,
+    "    Class to import and export routes as Файлы CSV\n"
+   ],
+   [
+    29,
+    3,
+    "            ('Все поддерживаемые файлы', '*.csv *.txt'),\n            ('Файлы CSV', '*.csv'),\n            ('Текстовые файлы', '*.txt'),\n"
+   ],
+   [
+    118,
+    1,
+    "        ftypes:list = [('Файлы CSV', '*.csv')]\n"
+   ]
+  ]
+ },
+ {
+  "file": "Router/overlay.py",
+  "before": "68e786333e9f79d1784b3e6cfbc7156793d2a7a4ee2954892dd0d207c2037982",
+  "after": "d1d8f0ec1268c547915288ee7449fc1743b75e60861b3756adb557a6bd1d7f57",
+  "edits": [
+   [
+    181,
+    1,
+    "                cstr = 'Эскадрилья · ' + ovr['jump'].format(d=destination, t='{t}')\n"
+   ],
+   [
+    424,
+    1,
+    "                cbtns[frame].config(foreground=color)\n"
+   ],
+   [
+    452,
+    0,
+    "        frame_labels = {'Default': 'Кабина', 'Galaxy Map': 'Карта галактики', 'Carrier': 'Авианосец'}\n"
+   ],
+   [
+    453,
+    1,
+    "            nb.Label(ovrprefs, text=frame_labels.get(name, name), justify=tk.LEFT).grid(row=row, column=col, padx=10, pady=5, sticky=tk.W)\n"
+   ],
+   [
+    477,
+    1,
+    "        nb.Checkbutton(ovrprefs, text=cnf[\"enable\"], variable=self.pb).grid(row=row, column=col, padx=5, pady=0, sticky=tk.W)\n"
+   ]
+  ]
+ },
+ {
+  "file": "Router/plotters.py",
+  "before": "99d0a476b2d8d9bec25bc2fee6cc0a1659fc52326d72710ca6295da51962f929",
+  "after": "531217a2185c3a1d26c47bfcf2082e219d14337d2197df4fb6a3864230e7dc11",
+  "edits": [
+   [
+    15,
+    1,
+    "from .constants import ALGORITHMS, ROUTE_LABELS, lbls, btns, tts, errs, SPANSH_ROUTE, SPANSH_GALAXY_ROUTE, SPANSH_RICHES_ROUTE, SPANSH_EXOBIOLOGY_ROUTE, SPANSH_TRADE_ROUTE, SPANSH_TOURIST_ROUTE, SPANSH_FLEETCARRIER_ROUTE, SPANSH_SYSTEMS, FLEET_CARRIER_STATS\n"
+   ],
+   [
+    133,
+    1,
+    "        lb:th.Listbox = th.Listbox(parent, [lbls[v] for v in options], width=0, name=\"options\")\n"
+   ],
+   [
+    402,
+    3,
+    "        algorithm = params.get('algorithm', 'Optimistic')\n        self.algorithm:tk.StringVar = tk.StringVar(plot_fr, value=ALGORITHMS.get(algorithm, algorithm))\n        algodd:th.ComboBox = th.ComboBox(plot_fr, self.algorithm, values=list(ALGORITHMS.values()), width=17)\n"
+   ],
+   [
+    457,
+    1,
+    "            'algorithm': next((k for k, v in ALGORITHMS.items() if v == self.algorithm.get()), self.algorithm.get()),\n"
+   ],
+   [
+    519,
+    1,
+    "        if self.route_type == \"Exobiology\" and spec.min_value_slider:\n"
+   ],
+   [
+    524,
+    1,
+    "        elif self.route_type == \"RtoR\" and spec.min_value_slider:\n"
+   ],
+   [
+    623,
+    1,
+    "            params['min_value'] = int(min_value_slider.get()) * (1_000_000 if self.route_type == \"Exobiology\" else 1)\n"
+   ],
+   [
+    656,
+    0,
+    "        # Keep the field names visible when the entries contain numbers.\n        def field_labels(row, keys):\n            for column, key in enumerate(keys):\n                th.Label(plot_fr, text=lbls[key]).grid(row=row, column=column, padx=2)\n\n        row += 1\n        field_labels(row, ('starting_capital', 'max_cargo', 'max_hops'))\n"
+   ],
+   [
+    679,
+    0,
+    "        row += 1\n        field_labels(row, ('max_hop_distance', 'max_distance', 'max_price_age'))\n"
+   ],
+   [
+    1082,
+    1,
+    "        label=ROUTE_LABELS['Galaxy'], plotter_class=GalaxyPlotter, url=SPANSH_GALAXY_ROUTE,\n"
+   ],
+   [
+    1087,
+    1,
+    "        label=ROUTE_LABELS['Neutron'], plotter_class=NeutronPlotter, url=SPANSH_ROUTE\n"
+   ],
+   [
+    1090,
+    1,
+    "        label=ROUTE_LABELS['RtoR'], plotter_class=RichesPlotter, url=SPANSH_RICHES_ROUTE,\n"
+   ],
+   [
+    1094,
+    1,
+    "        label=ROUTE_LABELS['Exobiology'], plotter_class=RichesPlotter, url=SPANSH_EXOBIOLOGY_ROUTE,\n"
+   ],
+   [
+    1098,
+    1,
+    "        label=ROUTE_LABELS['Trade'], plotter_class=TradePlotter, url=SPANSH_TRADE_ROUTE,\n"
+   ],
+   [
+    1104,
+    1,
+    "        label=ROUTE_LABELS['Tourist'], plotter_class=TouristPlotter, url=SPANSH_TOURIST_ROUTE,\n"
+   ],
+   [
+    1108,
+    1,
+    "        label=ROUTE_LABELS['FleetCarrier'], plotter_class=FleetCarrierPlotter, url=SPANSH_FLEETCARRIER_ROUTE,\n"
+   ],
+   [
+    1112,
+    1,
+    "        label=ROUTE_LABELS['Boxel'], plotter_class=BoxelPlotter, url=SPANSH_SYSTEMS, src_key='boxel'\n"
+   ]
+  ]
+ },
+ {
+  "file": "Router/prefs.py",
+  "before": "d0a146ed9bfd8936e1210546a9ecd1bbed3a352822a5d57f9b73988301cbc1af",
+  "after": "25be91ee5865d19bfec60af538242c4e3839ec58ec6238b2c2f8e67f2bce4924",
+  "edits": [
+   [
+    40,
+    1,
+    "            fpath = filedialog.askdirectory(title=\"Выберите папку для маршрутов\", initialdir=var.get())\n"
+   ]
+  ]
+ },
+ {
+  "file": "Router/route.py",
+  "before": "597d833cfaed8445557a4a6f9d9023397c50c425bac6e588fe791c5f5d29f5c8",
+  "after": "7df3afb7fd4c752ef679f6220261da0f9108239416e354aa870b00fc0230c247",
+  "edits": [
+   [
+    152,
+    1,
+    "        amount:str = hfplus(tuple([self.next_stop_value('Amount'), 'int', '', ' т']))\n"
+   ],
+   [
+    154,
+    1,
+    "            profit:str = hfplus(tuple([self.next_stop_value('Profit'), 'int', '', ' кр./т']))\n"
+   ],
+   [
+    157,
+    2,
+    "            cum_profit:str = hfplus(tuple([self.sum_value('Profit'), 'float', '', ' кр.']))\n            perhour:str = hfplus(tuple([self.credits_per_hour('Profit'), 'float', '', ' кр./ч']))\n"
+   ],
+   [
+    164,
+    1,
+    "            dist:str = hfplus(tuple([self.next_stop_value('Distance To Arrival'), 'float', '', ' св. с.']))\n"
+   ],
+   [
+    169,
+    1,
+    "            landmark:str = hfplus(tuple([self.next_stop_value('Landmark Value'), 'float', '', ' кр.']))\n"
+   ],
+   [
+    174,
+    1,
+    "                lines.append(f\"Ещё в системе ({len(bodies) - 1}): \" + \", \".join(f\"{b} ({s})\" if s else b for b, s in bodies[1:]))\n"
+   ],
+   [
+    176,
+    2,
+    "            cum_landmark:str = hfplus(tuple([self.sum_value('Landmark Value'), 'float', '', ' кр.']))\n            perhour:str = hfplus(tuple([self.credits_per_hour('Landmark Value'), 'float', '', ' кр./ч']))\n"
+   ],
+   [
+    183,
+    3,
+    "            scan:str = hfplus(tuple([scanval, 'float', '', ' кр.']))\n            mapping:str = hfplus(tuple([mapval, 'float', '', ' кр.']))\n            lines.append(\" · \".join(f\"{n}: {v}\" for n, v in [('Сканирование', scan), ('Картографирование', mapping)] if v))\n"
+   ],
+   [
+    193,
+    1,
+    "            cum_scan = hfplus(tuple([self.sum_value(f'Estimated {type} Value'), 'float', '', ' кр.']))\n"
+   ],
+   [
+    195,
+    1,
+    "                perhour:str = hfplus(tuple([self.credits_per_hour(f'Estimated {type} Value'), 'float', '', ' кр./ч']))\n"
+   ]
+  ]
+ },
+ {
+  "file": "Router/route_window.py",
+  "before": "d8fdcc782089854b6c64fad06c818fd013307ad2104d7f8e2151e5c3eb9343de",
+  "after": "562e15d971014ea38809b723683f0fca34cc80b0ac117c1d762d410162eaffd7",
+  "edits": [
+   [
+    1,
+    1,
+    "from tkinter import ttk, font as tkfont\n"
+   ],
+   [
+    13,
+    0,
+    "\n# Display names only. Route columns and CSV headers keep their original identifiers.\nCOLUMN_LABELS = {\n    \"System Name\": \"Система\", \"System\": \"Система\", \"Station Name\": \"Станция\",\n    \"Station Type\": \"Тип станции\", \"Station Class\": \"Класс станции\",\n    \"Station Faction\": \"Фракция\", \"Station State\": \"Состояние\",\n    \"Station Government\": \"Форма правления\", \"Station Economy\": \"Экономика\",\n    \"Station Secondary Economy\": \"Вторая экономика\",\n    \"Jumps\": \"Прыжки\", \"Jumps Rem\": \"Осталось прыжков\",\n    \"Waypoints\": \"Точки\", \"Waypoints Rem\": \"Осталось точек\",\n    \"Neutron\": \"Нейтронная звезда\", \"Neutron Star\": \"Нейтронная звезда\",\n    \"Body\": \"Тело\", \"Body Name\": \"Тело\", \"Body Type\": \"Тип тела\", \"Body Subtype\": \"Тип тела\",\n    \"Is Terra\": \"Терраформируемое\", \"Species\": \"Вид\", \"Value\": \"Ценность\",\n    \"Landmark Value\": \"Ценность биоданных\", \"Commodity\": \"Товар\", \"Amount\": \"Количество\",\n    \"Profit\": \"Прибыль за тонну\", \"Total Profit\": \"Прибыль за рейс\",\n    \"Cumulative Profit\": \"Прибыль нарастающим итогом\",\n    \"Dist To Arrival\": \"От точки прибытия\", \"Distance To Arrival\": \"От точки прибытия\",\n    \"Est Scan Value\": \"За сканирование\", \"Estimated Scan Value\": \"За сканирование\",\n    \"Est Mapping Value\": \"За картографирование\", \"Estimated Mapping Value\": \"За картографирование\",\n    \"Distance\": \"Расстояние\", \"Distance Jumped\": \"Дальность прыжка\",\n    \"Distance Rem\": \"Осталось пройти\", \"Distance Remaining\": \"Осталось пройти\",\n    \"Dist Rem\": \"Осталось пройти\", \"Fuel Left\": \"Запас топлива\",\n    \"Fuel Used\": \"Расход топлива\", \"Refuel\": \"Дозаправка\", \"Scoopable\": \"Можно заправиться\",\n    \"Icy Ring\": \"Ледяное кольцо\", \"Pristine\": \"Нетронутые запасы\", \"Restock Tritium\": \"Пополнить тритий\",\n}\n"
+   ],
+   [
+    70,
+    1,
+    "        ttl:ttk.Label = ttk.Label(parent, text=txt.capitalize(), font=BOLD)\n"
+   ],
+   [
+    81,
+    1,
+    "        ttl:ttk.Label = ttk.Label(parent, text=f\"{lbls['speed'].capitalize()}\", font=BOLD)\n"
+   ],
+   [
+    92,
+    1,
+    "        ttl:ttk.Label = ttk.Label(parent, text=f\"{lbls['distance'].capitalize()}\", font=BOLD)\n"
+   ],
+   [
+    96,
+    1,
+    "        dstr:str = f\"{hfplus(dist)} / {hfplus(route.total_dist())} св. л.\"\n"
+   ],
+   [
+    106,
+    1,
+    "        ttl:ttk.Label = ttk.Label(parent, text=label.capitalize(), font=BOLD)\n"
+   ],
+   [
+    109,
+    2,
+    "        so_far:tuple = tuple([route.sum_value(header, through=route.offset+1), 'float', '0', ' кр.'])\n        total:tuple = tuple([route.sum_value(header, through=len(route.route)), 'float', '0', ' кр.'])\n"
+   ],
+   [
+    121,
+    1,
+    "        ttl:ttk.Label = ttk.Label(frm, text=f\"{lbls['progress'].capitalize()}\", font=BOLD)\n"
+   ],
+   [
+    163,
+    0,
+    "        horizontal = ttk.Scrollbar(frm, orient=tk.HORIZONTAL, command=tree.xview)\n        horizontal.pack(side=tk.BOTTOM, fill=tk.X)\n        tree.configure(xscrollcommand=horizontal.set)\n"
+   ],
+   [
+    168,
+    13,
+    "        labels = [COLUMN_LABELS.get(hdr, hdr) for hdr in route.hdrs]\n        heading_font = tkfont.Font(root=frm, font=BOLD)\n        cell_font = tkfont.Font(root=frm, font=style.lookup(\"My.Treeview\", \"font\") or \"TkDefaultFont\")\n        padding = int(16 * scale)\n        widths = [heading_font.measure(label) + padding for label in labels]\n        body_col = route.hdrs.index(\"Body\") if \"Body\" in route.hdrs else None\n"
+   ],
+   [
+    183,
+    2,
+    "            values = list(row)\n            if body_col is not None and route.sc is not None:\n                values[body_col] = values[body_col].removeprefix(row[route.sc]).strip()\n            formatted = [hfplus(tuple([val] + HEADER_TYPES.get(route.hdrs[col], [\"-\", \"\"])))\n                         for col, val in enumerate(values)]\n            for col, value in enumerate(formatted):\n                widths[col] = max(widths[col], cell_font.measure(value) + padding)\n            r = tree.insert(\"\", \"end\", values=formatted)\n"
+   ],
+   [
+    188,
+    1,
+    "        for hdr, label, width in zip(route.hdrs, labels, widths):\n            anchor = tk.W if hdr in LEFT_ALIGN else tk.E\n            tree.heading(hdr, text=label, anchor=anchor)\n            tree.column(hdr, stretch=tk.NO, width=width, anchor=anchor)\n\n        return min(sum(widths) + 30, parent.winfo_screenwidth() - 60)\n"
+   ]
+  ]
+ },
+ {
+  "file": "Router/ui.py",
+  "before": "c0681782fb7fb0bc29c405536c3374c294ab90b863061b94a163281c34430180",
+  "after": "591de787e82897946ac1b2aba39ff54c8341d35bab3a9984a6cb94ea11ccc581",
+  "edits": [
+   [
+    69,
+    1,
+    "        self.router.set(PLOTTER_SPECS['Galaxy'].label)  # Set default value\n"
+   ],
+   [
+    302,
+    1,
+    "            tmp:tuple = tuple([Context.route.dist_remaining(), 'float', '', ' св. л.'])\n"
+   ],
+   [
+    326,
+    1,
+    "        nstr:str = route.get_waypoint(1) if route.dist_to_next() == 0 else f\"{route.get_waypoint(1)} ({dn} св. л.)\"\n"
+   ]
+  ]
+ },
+ {
+  "file": "Router/utils/misc.py",
+  "before": "f1cd16f4005e785487aba7b50b1f5ad0e5646e1e415742afab0a1c54654aabc5",
+  "after": "6a54fd00561c5063340aeab5676ba825bdd7f0c940328dbe97fc3cfc3e289338",
+  "edits": [
+   [
+    133,
+    1,
+    "            ret = \"Да\"\n"
+   ],
+   [
+    144,
+    4,
+    "            if floor(days) > 1: tmp.append(f\"{floor(days)} дн.\")\n            elif int(days) > 0: tmp.append(f\"1 дн.\")\n            if floor(hours) > 1: tmp.append(f\"{floor(hours)} ч\")\n            elif int(hours) > 0: tmp.append(f\" 1 ч\")\n"
+   ],
+   [
+    149,
+    2,
+    "                if floor(mins) > 1: tmp.append(f\" {int(mins)} мин\")\n                elif mins > 0: tmp.append(f\" 1 мин\")\n"
+   ],
+   [
+    217,
+    1,
+    "        exit_btn = tk.Button(self.frame, text=\"Закрыть\", fg=\"white\", bg=\"red4\", command=self.close)\n"
+   ]
+  ]
+ },
+ {
+  "file": "Router/utils/th/placeholder.py",
+  "before": "a1f36ff936d9774637b492314c64950bef890f3fe0b386146b1683fbd1cb5a8a",
+  "after": "3a4cb56174cdbdbcbda4cfe5ff8146cdd0f66ec46a932ef758b20ea67eaa948a",
+  "edits": [
+   [
+    63,
+    3,
+    "        self.menu.add_command(label=\"Вырезать\")\n        self.menu.add_command(label=\"Копировать\")\n        self.menu.add_command(label=\"Вставить\")\n"
+   ],
+   [
+    74,
+    3,
+    "        self.menu.entryconfigure(\"Вырезать\", command=lambda: w.event_generate(\"<<Cut>>\"))\n        self.menu.entryconfigure(\"Копировать\", command=lambda: w.event_generate(\"<<Copy>>\"))\n        self.menu.entryconfigure(\"Вставить\", command=lambda: w.event_generate(\"<<Paste>>\"))\n"
+   ]
+  ]
+ }
+]
