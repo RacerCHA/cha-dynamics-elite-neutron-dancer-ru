@@ -1,7 +1,8 @@
 name: Выпуск русского перевода
 on:
   push:
-    tags: [v2.1.2-ru.1]
+    branches: [main]
+    paths: ['.github/workflows/release.yml']
 permissions:
   contents: write
 jobs:
@@ -10,6 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
+          ref: v2.1.2-ru.1
           persist-credentials: false
       - name: Собрать комплект перевода
         run: |
@@ -24,4 +26,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" NeutronDancer-RU-2.1.2-ru.1.zip --verify-tag --title "Neutron Dancer 2.1.2 · Русский перевод 1" --notes "Комплект русской локализации для оригинального Neutron Dancer 2.1.2. Скачайте NeutronDancer-RU-2.1.2-ru.1.zip из Assets. Инструкция и ссылка на оригинал находятся в README. Проверено в Windows с ED Market Connector 6.1.2."
+          gh release create 'v2.1.2-ru.1' NeutronDancer-RU-2.1.2-ru.1.zip --verify-tag --title "Neutron Dancer 2.1.2 · Русский перевод 1" --notes "Комплект русской локализации для оригинального Neutron Dancer 2.1.2. Скачайте NeutronDancer-RU-2.1.2-ru.1.zip из Assets. Инструкция и ссылка на оригинал находятся в README. Проверено в Windows с ED Market Connector 6.1.2."
